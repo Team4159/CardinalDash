@@ -1,27 +1,30 @@
-// dependencies
-var app = require('express')();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var fs = require('fs');
-var ip = require('ip');
+const express = require('express'),
+      http = require('http'),
+      url = require('url'),
+      ip = require('ip'),
+      fs = require('fs'),
+      WebSocket = require('ws'),
+      port = 5800; // 5800 - 5810 for FRC fms
 
-// ports 5800 - 5810 available for fms
-var port = 5800;
+const app = express(),
+      server = http.createServer(app),
+      wss = new WebSocket.Server({ server });
 
-// On Connect
-io.on('connection', function (socket) {
+wss.on('connection', function connection(ws) {
 
-  var jsonData = {};
-  console.log("Robot connected!")
+  var sessionData = {};
+  cInfo('Robot connected')
+  ws.send('Connected to ws server!');
 
-  // On receiving data
-  socket.on('sendData', function (data) {
-    jsonData.push(data);
+  ws.on('data', function incoming(data) {
+    sessionData.push(data);
+    ws.send('received' + data);
+    cInfo('received: ' + data);
   });
 
-  // On disconnect
-  socket.on('disconnect', function () {
-    dataDump(jsonData);
+  ws.on('close', function close() {
+    dataDump(sessionData);
+    cInfo('Robot disconnected');
   });
 });
 
@@ -31,7 +34,7 @@ function dataDump(jsonData) {
     if(err) {
         return console.log(err);
     }
-    console.log("Connection ended. " + fileName + " saved!");
+    cInfo(fileName + " saved!");
   });
 }
 
@@ -45,6 +48,18 @@ function getDate() {
   return m + "-" + day + "-" + y + "-" + h + ":" + t;
 }
 
-server.listen(port, function() {
-  console.log("server started on " + ip.address() + ":" + port);
+function cInfo(data) {
+  console.log("[INFO] " + data);
+}
+
+function cWarning(data) {
+  console.log("[Warning] " + data);
+}
+
+function cError(data) {
+  console.log("[Error] " + data);
+}
+
+server.listen(port, function listening() {
+  cInfo('Listening on ' + ip.address() + ':' + port);
 });
