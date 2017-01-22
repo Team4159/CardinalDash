@@ -3,28 +3,41 @@ const express = require('express'),
       url = require('url'),
       ip = require('ip'),
       fs = require('fs'),
-      WebSocket = require('ws'),
-      port = 5800; // 5800 - 5810 for FRC fms
+      WebSocket = require('ws');
+
+var port = 5800,
+    canConnect = true;
+    sessionData = [];
 
 const app = express(),
       server = http.createServer(app),
-      wss = new WebSocket.Server({ server });
+      wss = new WebSocket.Server({
+        server: server,
+        verifyClient: function() {
+          if (canConnect) {
+            canConnect = false;
+            return true;
+          }
+          return false;
+        }
+      });
 
 wss.on('connection', function connection(ws) {
 
-  var sessionData = {};
-  cInfo('Robot connected')
+  cAlert('Robot connected')
   ws.send('Connected to ws server!');
 
-  ws.on('data', function incoming(data) {
+  ws.on('message', function incoming(data) {
     sessionData.push(data);
-    ws.send('received' + data);
-    cInfo('received: ' + data);
+    ws.send('You sent: ' + data);
+    cAlert('Received: ' + data);
   });
 
   ws.on('close', function close() {
     dataDump(sessionData);
     cInfo('Robot disconnected');
+    sessionData = [];
+    canConnect = true;
   });
 });
 
@@ -32,9 +45,9 @@ function dataDump(jsonData) {
   var fileName = "data/" + getDate() + ".json";
   fs.writeFile(fileName, jsonData, function(err) {
     if(err) {
-        return console.log(err);
+        return cError(err);
     }
-    cInfo(fileName + " saved!");
+    cAlert(fileName + " saved!");
   });
 }
 
@@ -52,8 +65,8 @@ function cInfo(data) {
   console.log("[INFO] " + data);
 }
 
-function cWarning(data) {
-  console.log("[Warning] " + data);
+function cAlert(data) {
+  console.log("[ALERT] " + data);
 }
 
 function cError(data) {
