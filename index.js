@@ -1,17 +1,19 @@
+'use strict';
 /* dependencies */
 const express = require('express'),
       http = require('http'),
       ip = require('ip'),
       fs = require('fs'),
-      WebSocket = require('ws');
+      WebSocket = require('ws'),
+      electron = require('electron');
 
 /* server vars */
 var port = 5800, /* 5800 - 5810 available for FRC fms */
-    canConnect = true;
+    canConnect = true,
     sessionData = [];
 
-const app = express(),
-      server = http.createServer(app),
+const expressApp = express(),
+      server = http.createServer(expressApp),
       wss = new WebSocket.Server({
         server: server,
         /* only allow one client at a time */
@@ -80,4 +82,27 @@ function cError(data) {
 
 server.listen(port, function listening() {
   cInfo('Listening on ' + ip.address() + ':' + port);
+});
+
+/* ELECTRON STUFF */
+
+const app = electron.app,  // Module to control application life.
+      BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
+var mainWindow = null;
+
+// called when all windows closed
+app.on('window-all-closed', function() {
+    if (process.platform != 'darwin') {
+        app.quit();
+    }
+});
+
+// called when electron is done initializing
+app.on('ready', function() {
+  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow.loadURL('file://' + __dirname + '/db/index.html');
+
+  mainWindow.on('closed', function() {
+    mainWindow = null;
+  });
 });
