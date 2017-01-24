@@ -1,27 +1,27 @@
 {
-  "name": "cardinaldashserver-2017",
+  "name": "cardinaldash-server",
   "version": "1.0.0",
-  "description": "Gonna be better than SmartDashbaord boi",
+  "description": "A helpful alternative to FRC's SmartDashboard",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Team4159/CardinalDash-2017.git"
+    "url": "git+https://github.com/Team4159/cardinaldash.git"
   },
   "author": "Brandon L",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Team4159/CardinalDash-2017/issues"
+    "url": "https://github.com/Team4159/cardinaldash/issues"
   },
-  "homepage": "https://github.com/Team4159/CardinalDash-2017#readme",
+  "homepage": "https://github.com/Team4159/cardinaldash#readme",
   "dependencies": {
     "bufferutil": "^1.3.0",
     "express": "^4.14.0",
     "fs": "0.0.1-security",
+    "http": "0.0.0",
     "ip": "^1.1.4",
-    "socket.io": "^1.7.2",
     "ws": "^1.1.1"
   }
 }

@@ -1,11 +1,12 @@
+/* dependencies */
 const express = require('express'),
       http = require('http'),
-      url = require('url'),
       ip = require('ip'),
       fs = require('fs'),
       WebSocket = require('ws');
 
-var port = 5800,
+/* server vars */
+var port = 5800, /* 5800 - 5810 available for FRC fms */
     canConnect = true;
     sessionData = [];
 
@@ -13,6 +14,7 @@ const app = express(),
       server = http.createServer(app),
       wss = new WebSocket.Server({
         server: server,
+        /* only allow one client at a time */
         verifyClient: function() {
           if (canConnect) {
             canConnect = false;
@@ -23,16 +25,18 @@ const app = express(),
       });
 
 wss.on('connection', function connection(ws) {
-
+  /* on new connection */
   cAlert('Robot connected')
-  ws.send('Connected to ws server!');
+  ws.send('CONNECTED TO ' + ip.address() + ':' + port);
 
+  /* on receiving data */
   ws.on('message', function incoming(data) {
     sessionData.push(data);
-    ws.send('You sent: ' + data);
+    ws.send(Date.now() + 'RECEIVED');
     cAlert('Received: ' + data);
   });
 
+  /* on disconnect */
   ws.on('close', function close() {
     dataDump(sessionData);
     cInfo('Robot disconnected');
@@ -41,6 +45,7 @@ wss.on('connection', function connection(ws) {
   });
 });
 
+/* saves json titled with current date */
 function dataDump(jsonData) {
   var fileName = "data/" + getDate() + ".json";
   fs.writeFile(fileName, jsonData, function(err) {
@@ -51,6 +56,7 @@ function dataDump(jsonData) {
   });
 }
 
+/* returns string in m-d-yr-h:min format */
 function getDate() {
   var d = new Date();
   var m = d.getMonth()+1,
@@ -61,14 +67,13 @@ function getDate() {
   return m + "-" + day + "-" + y + "-" + h + ":" + t;
 }
 
+/* custom log functions */
 function cInfo(data) {
   console.log("[INFO] " + data);
 }
-
 function cAlert(data) {
   console.log("[ALERT] " + data);
 }
-
 function cError(data) {
   console.log("[Error] " + data);
 }
