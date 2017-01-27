@@ -1,3 +1,9 @@
+const ipcRenderer = require('electron').ipcRenderer;
+
+ipcRenderer.on('store-data', function (event, data) {
+    console.log(data);
+});
+
 var Plotly = require('plotly.js');
 
 var rawDataURL = 'https://raw.githubusercontent.com/plotly/datasets/master/2016-weather-data-seattle.csv';

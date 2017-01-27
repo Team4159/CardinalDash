@@ -8,14 +8,13 @@ const express = require('express'),
       fs = require('fs'),
       WebSocket = require('ws'),
       electron = require('electron');
-
 /* ws vars */
 var port = 5800, /* 5800 - 5810 available for FRC fms */
     canConnect = true,
     sessionData = [],
     time = 0,
     delayTimer;
-    
+
 const expressApp = express(),
       server = http.createServer(expressApp),
       wss = new WebSocket.Server({
@@ -31,7 +30,6 @@ const expressApp = express(),
       });
 
 wss.on('connection', function connection(ws) {
-
   /* On new connection */
   cInfo('Robot connected')
   ws.send('CONNECTED TO ' + ip.address() + ':' + port);
@@ -54,13 +52,15 @@ wss.on('connection', function connection(ws) {
     sessionData.push(data);
     ws.send('ACK ' + roughSizeOfObject(data));
     cAlert(data);
+    mainWindow.webContents.send('store-data', data);
   });
 
   ws.on('close', function close() {
     dataDump(sessionData);
     cInfo('Robot disconnected');
     sessionData = [];
-    canConnect = true;  });
+    canConnect = true;
+  });
 });
 
 /* saves json titled with current date */
@@ -136,13 +136,13 @@ server.listen(port, function listening() {
 /* ELECTRON STUFF */
 
 const app = electron.app,  // Module to control application life.
-      BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
+BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 var mainWindow = null;
 
 // called when electron is done initializing
 app.on('ready', function() {
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
-  mainWindow = new BrowserWindow({width, height});
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
+  mainWindow = new BrowserWindow({width, height, fullscreenable: false, title: "CardinalDash", frame: false});
   mainWindow.loadURL('file://' + __dirname + '/db/index.html');
 
   mainWindow.on('closed', function() {
