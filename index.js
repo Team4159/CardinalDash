@@ -36,6 +36,7 @@ wss.on('connection', function connection(ws) {
     sessionData.push(data);
     ws.send(Date.now() + 'RECEIVED');
     cAlert('Received: ' + data);
+    mainWindow.webContents.send('store-data', data);
   });
 
   /* on disconnect */
@@ -99,7 +100,7 @@ app.on('window-all-closed', function() {
 
 // called when electron is done initializing
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({fullscreenable: false, title: "CardinalDash", frame: false});
   mainWindow.loadURL('file://' + __dirname + '/db/index.html');
 
   mainWindow.on('closed', function() {
