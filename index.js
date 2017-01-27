@@ -1,17 +1,21 @@
 'use strict';
+
 /* dependencies */
 const express = require('express'),
       http = require('http'),
       ip = require('ip'),
+      os = require('os'),
       fs = require('fs'),
       WebSocket = require('ws'),
       electron = require('electron');
 
-/* server vars */
+/* ws vars */
 var port = 5800, /* 5800 - 5810 available for FRC fms */
     canConnect = true,
-    sessionData = [];
-
+    sessionData = [],
+    time = 0,
+    delayTimer;
+    
 const expressApp = express(),
       server = http.createServer(expressApp),
       wss = new WebSocket.Server({
@@ -27,24 +31,36 @@ const expressApp = express(),
       });
 
 wss.on('connection', function connection(ws) {
-  /* on new connection */
-  cAlert('Robot connected')
+
+  /* On new connection */
+  cInfo('Robot connected')
   ws.send('CONNECTED TO ' + ip.address() + ':' + port);
+
+  // Checks for timeout every one second
+  delayTimer = setInterval(function() {
+    if(time <= 5) {
+      time++;
+    } else {
+      // If timeout is more than 5 seconds
+      ws.terminate();
+      time = 0;
+      clearInterval(delayTimer);
+    }
+  }, 1000);
 
   /* on receiving data */
   ws.on('message', function incoming(data) {
+    time = 0;
     sessionData.push(data);
-    ws.send(Date.now() + 'RECEIVED');
-    cAlert('Received: ' + data);
+    ws.send('ACK ' + roughSizeOfObject(data));
+    cAlert(data);
   });
 
-  /* on disconnect */
   ws.on('close', function close() {
     dataDump(sessionData);
     cInfo('Robot disconnected');
     sessionData = [];
-    canConnect = true;
-  });
+    canConnect = true;  });
 });
 
 /* saves json titled with current date */
@@ -80,8 +96,41 @@ function cError(data) {
   console.log("[Error] " + data);
 }
 
+// Credits to http://stackoverflow.com/questions/1248302/javascript-object-size
+function roughSizeOfObject(object) {
+  var objectList = [];
+  var stack = [ object ];
+  var bytes = 0;
+  while ( stack.length ) {
+    var value = stack.pop();
+
+    if ( typeof value === 'boolean' ) {
+      bytes += 4;
+    }
+    else if ( typeof value === 'string' ) {
+      bytes += value.length * 2;
+    }
+    else if ( typeof value === 'number' ) {
+      bytes += 8;
+    }
+    else if
+    (
+      typeof value === 'object'
+      && objectList.indexOf( value ) === -1
+    )
+    {
+      objectList.push( value );
+
+      for( var i in value ) {
+        stack.push( value[ i ] );
+      }
+    }
+  }
+  return bytes;
+}
+
 server.listen(port, function listening() {
-  cInfo('Listening on ' + ip.address() + ':' + port);
+  cInfo('Listening on ' + ip.address() + ':' + port + ' or ' + os.hostname() + ":" + port);
 });
 
 /* ELECTRON STUFF */
@@ -90,19 +139,20 @@ const app = electron.app,  // Module to control application life.
       BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 var mainWindow = null;
 
-// called when all windows closed
-app.on('window-all-closed', function() {
-    if (process.platform != 'darwin') {
-        app.quit();
-    }
-});
-
 // called when electron is done initializing
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  mainWindow = new BrowserWindow({width, height});
   mainWindow.loadURL('file://' + __dirname + '/db/index.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
+});
+
+// osx on quit
+app.on('window-all-closed', function() {
+    if (process.platform != 'darwin') {
+        app.quit();
+    }
 });

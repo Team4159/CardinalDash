@@ -1,5 +1,5 @@
 {
-  "name": "cardinaldash-server",
+  "name": "CardinalDash",
   "version": "1.0.0",
   "description": "A helpful alternative to FRC's SmartDashboard",
   "main": "index.js",
@@ -21,8 +21,11 @@
     "electron": "^1.4.15",
     "express": "^4.14.0",
     "fs": "0.0.1-security",
+    "gl": "^4.0.3",
     "http": "0.0.0",
     "ip": "^1.1.4",
+    "os": "^0.1.1",
+    "plotly.js": "^1.22.0",
     "ws": "^1.1.1"
   }
 }
