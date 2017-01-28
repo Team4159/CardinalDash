@@ -8,7 +8,7 @@ const express = require('express'),
       fs = require('fs'),
       WebSocket = require('ws'),
       electron = require('electron');
-/* ws vars */
+
 var port = 5800, /* 5800 - 5810 available for FRC fms */
     canConnect = true,
     sessionData = [],
@@ -52,7 +52,7 @@ wss.on('connection', function connection(ws) {
     sessionData.push(data);
     ws.send('ACK ' + roughSizeOfObject(data));
     cAlert(data);
-    mainWindow.webContents.send('store-data', data);
+    mainWindow.webContents.send('robot-data', data);
   });
 
   ws.on('close', function close() {
@@ -83,17 +83,6 @@ function getDate() {
       h = d.getHours(),
       t = d.getMinutes();
   return m + "-" + day + "-" + y + "-" + h + ":" + t;
-}
-
-/* custom log functions */
-function cInfo(data) {
-  console.log("[INFO] " + data);
-}
-function cAlert(data) {
-  console.log("[ALERT] " + data);
-}
-function cError(data) {
-  console.log("[Error] " + data);
 }
 
 // Credits to http://stackoverflow.com/questions/1248302/javascript-object-size
@@ -128,6 +117,18 @@ function roughSizeOfObject(object) {
   }
   return bytes;
 }
+
+/* custom log functions */
+function cInfo(data) {
+  console.log("[INFO] " + data);
+}
+function cAlert(data) {
+  console.log("[ALERT] " + data);
+}
+function cError(data) {
+  console.log("[Error] " + data);
+}
+
 
 server.listen(port, function listening() {
   cInfo('Listening on ' + ip.address() + ':' + port + ' or ' + os.hostname() + ":" + port);

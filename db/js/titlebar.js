@@ -26,7 +26,7 @@
           type: 'question',
           buttons: ['Yes', 'No'],
           title: 'Confirm',
-          message: 'Are you sure you want to quit?'
+          message: 'Are you sure you want to close?'
           });
 
           if(choice === 0 )

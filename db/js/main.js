@@ -1,72 +1,13 @@
-const ipcRenderer = require('electron').ipcRenderer;
+const Plotly = require('plotly.js'),
+      ipcRenderer = require('electron').ipcRenderer;
+      $ = require('jquery');
 
-ipcRenderer.on('store-data', function (event, data) {
+ipcRenderer.on('robot-data', function (event, data) {
     console.log(data);
+    $('#side-content-content').append(data);
+    updateMain();
 });
 
-var Plotly = require('plotly.js');
+function updateMain() {
 
-var rawDataURL = 'https://raw.githubusercontent.com/plotly/datasets/master/2016-weather-data-seattle.csv';
-var xField = 'Date';
-var yField = 'Mean_TemperatureC';
-
-var selectorOptions = {
-    buttons: [{
-        step: 'month',
-        stepmode: 'backward',
-        count: 1,
-        label: '1m'
-    }, {
-        step: 'month',
-        stepmode: 'backward',
-        count: 6,
-        label: '6m'
-    }, {
-        step: 'year',
-        stepmode: 'todate',
-        count: 1,
-        label: 'YTD'
-    }, {
-        step: 'year',
-        stepmode: 'backward',
-        count: 1,
-        label: '1y'
-    }, {
-        step: 'all',
-    }],
-};
-
-Plotly.d3.csv(rawDataURL, function(err, rawData) {
-    if(err) throw err;
-
-    var data = prepData(rawData);
-    var layout = {
-        title: 'Time series with range slider and selectors',
-        xaxis: {
-            rangeselector: selectorOptions,
-            rangeslider: {}
-        },
-        yaxis: {
-            fixedrange: true
-        }
-    };
-
-    Plotly.plot('graph', data, layout);
-});
-
-function prepData(rawData) {
-    var x = [];
-    var y = [];
-
-    rawData.forEach(function(datum, i) {
-
-        x.push(new Date(datum[xField]));
-        y.push(datum[yField]);
-    });
-
-    return [{
-        mode: 'lines',
-        x: x,
-        y: y
-    }];
 }
