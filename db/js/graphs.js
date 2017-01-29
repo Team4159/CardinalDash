@@ -7,7 +7,6 @@ const Plotly = require('plotly.js'),
 
 /* load templates */
 
-
 $('#load-btn').click(function() {
   dialog.showOpenDialog(function (fileNames) {
     // fileNames is an array that contains all the selected
@@ -29,8 +28,5 @@ function readFile(filepath){
     }
     everything = JSON.parse(JSON.stringify(data));
     console.log(everything);
-
-    // challenge: console.log the first element of json
-
   });
 }

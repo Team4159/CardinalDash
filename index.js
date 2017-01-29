@@ -13,7 +13,8 @@ var port = 5800, /* 5800 - 5810 available for FRC fms */
     canConnect = true,
     sessionData = [],
     time = 0,
-    delayTimer;
+    delayTimer,
+    id = 0;
 
 const expressApp = express(),
       server = http.createServer(expressApp),
@@ -49,7 +50,8 @@ wss.on('connection', function connection(ws) {
   /* on receiving data */
   ws.on('message', function incoming(data) {
     time = 0;
-    sessionData.push(data);
+    sessionData.push(id + ":" +data);
+    id++;
     ws.send('ACK ' + roughSizeOfObject(data));
     cAlert(data);
     mainWindow.webContents.send('robot-data', data);
@@ -60,6 +62,7 @@ wss.on('connection', function connection(ws) {
     cInfo('Robot disconnected');
     sessionData = [];
     canConnect = true;
+    id = 0;
   });
 });
 
