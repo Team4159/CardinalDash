@@ -5,12 +5,10 @@ const loadPage = (page) => {
   $("#contents").html("");
   $("#loading").addClass("fill");
   $("#loading").load("loading.html", () => {
-    setTimeout(function() { // kek
-      $("#contents").load(page, () => {
-        $("#loading").html("");
-        $("#loading").removeClass("fill");
-      });
-    }, 100);
+    $("#contents").load(page, () => {
+      $("#loading").html("");
+      $("#loading").removeClass("fill");
+    });
   });
 };
 
