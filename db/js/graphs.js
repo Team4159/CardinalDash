@@ -26,7 +26,7 @@ function readFile(filepath){
       alert("An error ocurred reading the file :" + err.message);
       return;
     }
-    everything = JSON.parse(JSON.stringify(data));
+    everything = JSON.parse(data);
     console.log(everything);
   });
 }
