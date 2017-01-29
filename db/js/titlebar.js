@@ -1,4 +1,5 @@
 const remote = require('electron').remote;
+
 function init() {
 
   document.getElementById("dev-btn").addEventListener("click", function (e) {
