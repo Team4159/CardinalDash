@@ -6,7 +6,6 @@ const plotly = require('plotly.js'),
       fs = require('fs');
 
 /* load templates */
-$('#nav').load("templates/nav.html");
 
 $('#load-btn').click(function() {
 

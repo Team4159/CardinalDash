@@ -1,7 +1,20 @@
 const remote = require('electron').remote;
+$ = require('jquery');
 
-function init() {
+const loadPage = (page) => {
+  $("#contents").html("");
+  $("#loading").addClass("fill");
+  $("#loading").load("loading.html", () => {
+    setTimeout(function() { // kek
+      $("#contents").load(page, () => {
+        $("#loading").html("");
+        $("#loading").removeClass("fill");
+      });
+    }, 100);
+  });
+};
 
+const init = () => {
   document.getElementById("dev-btn").addEventListener("click", function (e) {
     const window = remote.getCurrentWindow();
     window.toggleDevTools();
@@ -40,6 +53,9 @@ function init() {
 
 document.onreadystatechange = function () {
   if (document.readyState == "complete") {
-    init();
+    $('#nav').load("templates/nav.html", () => {
+      init();
+    });
+    $('#contents').load("dashboard.html");
   }
 };
