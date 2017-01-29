@@ -1,5 +1,5 @@
 /* dependencies */
-const ipcRenderer = require('electron').ipcRenderer;
+var ipcRenderer = require('electron').ipcRenderer;
       $ = require('jquery');
 
 /* load templates */

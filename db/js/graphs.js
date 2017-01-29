@@ -1,5 +1,5 @@
 /* dependencies */
-const Plotly = require('plotly.js'),
+var Plotly = require('plotly.js'),
       $ = require('jquery'),
       app = require('electron').remote,
       dialog = app.dialog,
