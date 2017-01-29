@@ -27,7 +27,10 @@ function readFile(filepath){
       alert("An error ocurred reading the file :" + err.message);
       return;
     }
-    // Change how to handle the file content
-    console.log("The file content is : " + data);
+    makeGraphs(data);
   });
+}
+
+function makeGraphs(data) {
+  console.log(data);
 }
