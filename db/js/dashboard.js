@@ -1,10 +1,10 @@
-/* load templates */
-$('#nav').load("templates/nav.html");
-
 /* dependencies */
 const Plotly = require('plotly.js'),
       ipcRenderer = require('electron').ipcRenderer;
       $ = require('jquery');
+
+/* load templates */
+$('#nav').load("templates/nav.html");
 
 var everything, value; // from raw json
 var time, pdpVoltage; // from everything["values"]
