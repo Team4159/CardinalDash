@@ -3,11 +3,13 @@ $ = require('jquery');
 
 const loadPage = (page) => {
   $("#contents").html("");
+  $("#contents").removeClass("fill");
   $("#loading").addClass("fill");
   $("#loading").load("loading.html", () => {
     $("#contents").load(page, () => {
       $("#loading").html("");
       $("#loading").removeClass("fill");
+      $("#contents").addClass("fill");
     });
   });
 };
