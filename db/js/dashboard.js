@@ -1,6 +1,5 @@
 /* dependencies */
-const Plotly = require('plotly.js'),
-      ipcRenderer = require('electron').ipcRenderer;
+const ipcRenderer = require('electron').ipcRenderer;
       $ = require('jquery');
 
 /* load templates */
