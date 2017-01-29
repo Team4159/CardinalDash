@@ -50,10 +50,10 @@ wss.on('connection', function connection(ws) {
   /* on receiving data */
   ws.on('message', function incoming(data) {
     time = 0;
-    sessionData.push(id + ":" +data);
+    sessionData.push(id.toString() + ":" +data);
     id++;
     ws.send('ACK ' + roughSizeOfObject(data));
-    cAlert(data);
+    cAlert('Received: ' + roughSizeOfObject(data));
     mainWindow.webContents.send('robot-data', data);
   });
 
