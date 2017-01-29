@@ -144,7 +144,7 @@ var mainWindow = null;
 app.on('ready', function() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({width, height, fullscreenable: true, title: "CardinalDash", frame: false});
-  mainWindow.loadURL('file://' + __dirname + '/db/dashboard.html');
+  mainWindow.loadURL('file://' + __dirname + '/db/index.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;
