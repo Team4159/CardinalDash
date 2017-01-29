@@ -14,30 +14,23 @@ $('#load-btn').click(function() {
    if(fileNames === undefined){
     console.log("No file selected");
    } else {
-    //readFile(fileNames[0]);
-    makeGraph(fileNames[0]);
+    readFile(fileNames[0]);
    }
   });
 });
 
-// function readFile(filepath){
-//   fs.readFile(filepath, 'utf-8', function (err, data) {
-//     if(err){
-//       alert("An error ocurred reading the file :" + err.message);
-//       return;
-//     }
-//     makeGraphs(data);
-//   });
-// }
-//
-// var everything;
-//
-// function makeGraphs(data) {
-//   everything = JSON.parse(JSON.stringify(data));
-// }
+var everything;
 
-function makeGraph(jsonFile) {
-  Plotly.d3.json(jsonFile, function(figure){
-    console.log(figure);
+function readFile(filepath){
+  fs.readFile(filepath, 'utf-8', function (err, data) {
+    if(err){
+      alert("An error ocurred reading the file :" + err.message);
+      return;
+    }
+    everything = JSON.parse(JSON.stringify(data));
+    console.log(everything);
+
+    // challenge: console.log the first element of json
+
   });
 }
