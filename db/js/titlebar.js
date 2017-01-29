@@ -1,42 +1,39 @@
-(function () {
+  const remote = require('electron').remote;
 
-      const remote = require('electron').remote;
+  function init() {
+    document.getElementById("min-btn").addEventListener("click", function (e) {
+      const window = remote.getCurrentWindow();
+      window.minimize();
+    });
 
-      function init() {
-        document.getElementById("min-btn").addEventListener("click", function (e) {
-          const window = remote.getCurrentWindow();
-          window.minimize();
-        });
+    document.getElementById("max-btn").addEventListener("click", function (e) {
+      const window = remote.getCurrentWindow();
+      if (!window.isMaximized()) {
+        window.maximize();
+      } else {
+        window.unmaximize();
+      }
+    });
 
-        document.getElementById("max-btn").addEventListener("click", function (e) {
-          const window = remote.getCurrentWindow();
-          if (!window.isMaximized()) {
-            window.maximize();
-          } else {
-            window.unmaximize();
-          }
-        });
+    document.getElementById("close-btn").addEventListener("click", function (e) {
+      const window = remote.getCurrentWindow();
+      var dialog = require('electron').remote.dialog;
+      var choice = dialog.showMessageBox(
+      remote.getCurrentWindow(),
+      {
+      type: 'question',
+      buttons: ['Yes', 'No'],
+      title: 'Confirm',
+      message: 'Are you sure you want to close?'
+      });
 
-        document.getElementById("close-btn").addEventListener("click", function (e) {
-          const window = remote.getCurrentWindow();
-          var dialog = require('electron').remote.dialog;
-          var choice = dialog.showMessageBox(
-          remote.getCurrentWindow(),
-          {
-          type: 'question',
-          buttons: ['Yes', 'No'],
-          title: 'Confirm',
-          message: 'Are you sure you want to close?'
-          });
+      if(choice === 0 )
+        window.close();
+    });
+  };
 
-          if(choice === 0 )
-            window.close();
-        });
-      };
-
-      document.onreadystatechange = function () {
-        if (document.readyState == "complete") {
-          init();
-        }
-      };
-})();
+  document.onreadystatechange = function () {
+    if (document.readyState == "complete") {
+      init();
+    }
+  };

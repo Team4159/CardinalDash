@@ -143,8 +143,8 @@ var mainWindow = null;
 // called when electron is done initializing
 app.on('ready', function() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
-  mainWindow = new BrowserWindow({width, height, fullscreenable: false, title: "CardinalDash", frame: false});
-  mainWindow.loadURL('file://' + __dirname + '/db/index.html');
+  mainWindow = new BrowserWindow({width, height, fullscreenable: true, title: "CardinalDash", frame: false});
+  mainWindow.loadURL('file://' + __dirname + '/db/dashboard.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;
