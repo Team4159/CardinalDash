@@ -1,70 +1,38 @@
 'use strict';
 
 /* dependencies */
-const express = require('express'),
-      http = require('http'),
-      ip = require('ip'),
+const ip = require('ip'),
       os = require('os'),
       fs = require('fs'),
       WebSocket = require('ws'),
-      electron = require('electron');
+      electron = require('electron'),
+      ws = new WebSocket('ws://ROBORIO'); // change this
 
-var port = 5800, /* 5800 - 5810 available for FRC fms */
-    canConnect = true,
-    sessionData = [],
-    time = 0,
-    delayTimer,
+var sessionData = [],
     id = 0;
 
-const expressApp = express(),
-      server = http.createServer(expressApp),
-      wss = new WebSocket.Server({
-        server: server,
-        /* only allow one client at a time */
-        verifyClient: function() {
-          if (canConnect) {
-            canConnect = false;
-            return true;
-          }
-          return false;
-        }
-      });
+global.canReceive = false;
+global.save = false;
 
-wss.on('connection', function connection(ws) {
-  /* On new connection */
-  cInfo('Robot connected')
-  ws.send('CONNECTED TO ' + ip.address() + ':' + port);
-
-  // Checks for timeout every one second
-  delayTimer = setInterval(function() {
-    if(time <= 5) {
-      time++;
-    } else {
-      // If timeout is more than 5 seconds
-      ws.terminate();
-      time = 0;
-      clearInterval(delayTimer);
-    }
-  }, 1000);
-
-  /* on receiving data */
-  ws.on('message', function incoming(data) {
-    time = 0;
-    sessionData.push(id.toString() + ":" +data);
+ws.on('message', function incoming(data, flags) {
+  if(global.canReceive) {
+    sessionData.push(id.toString() + ":" + data); // if cole adds id then remove this
     id++;
-    ws.send('ACK ' + roughSizeOfObject(data));
-    cAlert('Received: ' + roughSizeOfObject(data));
-    mainWindow.webContents.send('robot-data', data);
-  });
-
-  ws.on('close', function close() {
-    dataDump(sessionData);
-    cInfo('Robot disconnected');
-    sessionData = [];
-    canConnect = true;
-    id = 0;
-  });
+  }
 });
+
+
+if(global.save) {
+  if(sessionData != null) {
+    dataDump(sessionData);
+    sessionData = [];
+    id = 0;
+    global.canReceive = false;
+    global.save = false;
+  } else {
+    // tell electron you're saving an empty json idiot
+  }
+}
 
 /* saves json titled with current date */
 function dataDump(jsonData) {
@@ -131,11 +99,6 @@ function cAlert(data) {
 function cError(data) {
   console.log("[Error] " + data);
 }
-
-
-server.listen(port, function listening() {
-  cInfo('Listening on ' + ip.address() + ':' + port + ' or ' + os.hostname() + ":" + port);
-});
 
 /* ELECTRON STUFF */
 
