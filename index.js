@@ -46,6 +46,7 @@ const main = () => {
       id = 0;
       global.canReceive = false;
       global.save = false;
+      global.ip = null;
     } else {
       // tell electron you're saving an empty json idiot
     }
@@ -53,7 +54,8 @@ const main = () => {
 
 }
 
-const loop = setInterval(main,100);
+// update every 100 ms
+const update = setInterval(main,100);
 
 /* saves json titled with current date */
 const dataDump = (jsonData) => {
