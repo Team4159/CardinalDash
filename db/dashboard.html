@@ -1,13 +1,21 @@
 <div class="container-fluid text-center fill">
   <div class="row content fill">
     <div id="dashboard-main-content" class="col-sm-8 text-left fill">
-      <h2>You are not connected.</h2>
-      <textarea></textarea>
-      <button id="rec-btn" type="button" class="btn btn-primary">Receive data</button>
-      <button id="sav-btn" type="button" class="btn btn-success">Save</button>
+
+      <div id="connection-text"></div>
+
+      <p>
+        <input id="ip-textbox" type="text">
+        <button id="connect-btn" type="button" class="btn btn-success">Connect</button>
+        <button id="rec-btn" type="button" class="btn btn-primary">Receive data</button>
+        <button id="sav-btn" type="button" class="btn btn-success">Save</button>
+      </p>
+
+
+
     </div>
     <div id="dashboard-side-content" class="col-sm-4 sidenav fill">
-      <h3>Current Logs</h3>
+      <h3>Match Log</h3>
       <div id="side-content-content"></div>
     </div>
   </div>
