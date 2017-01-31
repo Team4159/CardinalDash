@@ -5,37 +5,58 @@ const ip = require('ip'),
       os = require('os'),
       fs = require('fs'),
       WebSocket = require('ws'),
-      electron = require('electron'),
-      ws = new WebSocket('ws://ROBORIO'); // change this
+      electron = require('electron');
 
+// client vars
 var sessionData = [],
-    id = 0;
+    id = 0,
+    ws;
 
+// node js global vars to interact with electron display js
 global.canReceive = false;
 global.save = false;
 
-ws.on('message', function incoming(data, flags) {
-  if(global.canReceive) {
-    sessionData.push(id.toString() + ":" + data); // if cole adds id then remove this
-    id++;
-  }
-});
+// main function loop
+const main = () => {
 
+  // tries connecting to server
+  if (global.ip != null) {
+    try {
+      ws = new WebSocket('ws://' + global.ip);
+    } catch (e) {
+      cError("Could not connect to server");
+      global.ip = null;
+    }
 
-if(global.save) {
-  if(sessionData != null) {
-    dataDump(sessionData);
-    sessionData = [];
-    id = 0;
-    global.canReceive = false;
-    global.save = false;
-  } else {
-    // tell electron you're saving an empty json idiot
+  // on receiving message from server
+  ws.on('message', function incoming(data, flags) {
+      if(global.canReceive) {
+        sessionData.push(id.toString() + ":" + data); // if cole adds id then remove this
+        id++;
+        cAlert("Received " + sizeOf(data));
+        ws.send("ACK " + sizeOf(data));
+      }
+    });
   }
+
+  if(global.save) {
+    if(sessionData != null) {
+      dataDump(sessionData);
+      sessionData = [];
+      id = 0;
+      global.canReceive = false;
+      global.save = false;
+    } else {
+      // tell electron you're saving an empty json idiot
+    }
+  }
+
 }
 
+const loop = setInterval(main,100);
+
 /* saves json titled with current date */
-function dataDump(jsonData) {
+const dataDump = (jsonData) => {
   var fileName = "data/" + getDate() + ".json";
   fs.writeFile(fileName, jsonData, function(err) {
     if(err) {
@@ -46,7 +67,7 @@ function dataDump(jsonData) {
 }
 
 /* returns string in m-d-yr-h:min format */
-function getDate() {
+const getDate = () => {
   var d = new Date();
   var m = d.getMonth()+1,
       day = d.getDate(),
@@ -57,7 +78,7 @@ function getDate() {
 }
 
 // Credits to http://stackoverflow.com/questions/1248302/javascript-object-size
-function roughSizeOfObject(object) {
+const sizeOf = (object) => {
   var objectList = [];
   var stack = [ object ];
   var bytes = 0;
@@ -90,13 +111,13 @@ function roughSizeOfObject(object) {
 }
 
 /* custom log functions */
-function cInfo(data) {
+const cInfo = (data) => {
   console.log("[INFO] " + data);
 }
-function cAlert(data) {
+const cAlert = (data) => {
   console.log("[ALERT] " + data);
 }
-function cError(data) {
+const cError = (data) => {
   console.log("[Error] " + data);
 }
 
