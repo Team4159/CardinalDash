@@ -14,7 +14,7 @@ ipcRenderer.on('robot-data', (event, data) => {
 
 /* button event handlers */
 $('#connect-btn').click(function() {
-  ipcRenderer.send('ip_address', '"' + $('#ip-textbox').val() + '"');
+  ipcRenderer.send('ip_address', $('#ip-textbox').val());
 });
 $('#rec-btn').click(function() {
   if(canConnect) {
