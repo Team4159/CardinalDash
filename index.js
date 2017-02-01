@@ -16,8 +16,8 @@ var sessionData = [],
 ipcMain.on('ip_address', (event, data) => {
 
   try {
-    data = data.substring(1,data.length-1);
-    ws = new WebSocket('ws://' + data);
+    ws = new WebSocket('ws://' + data.substring(1,data.length-1));
+
     // on receiving message from server
     ws.on('message', function incoming(data, flags) {
       if(global.canReceive) {
