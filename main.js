@@ -33,7 +33,7 @@ ipcMain.on('ip-address', (event, ip) => {
 
   /* If robot server closes, save and reset */
   ws.on('close', () => {
-    dataDump(sessionData);
+    if(sessionData.length > 0) dataDump(sessionData);
     sessionData = [];
     canReceive = false;
   });
@@ -46,7 +46,7 @@ ipcMain.on('canReceive', (event, bleh) => {
 });
 
 ipcMain.on('save', (event, meh) => {
-  dataDump(sessionData);
+  if(sessionData.length > 0) dataDump(sessionData);
   sessionData = [];
   canReceive = false;
 });
