@@ -5,57 +5,48 @@ const ip = require('ip'),
       os = require('os'),
       fs = require('fs'),
       WebSocket = require('ws'),
-      electron = require('electron');
+      electron = require('electron'),
+      {app, BrowserWindow, ipcMain} = electron;
 
 // client vars
 var sessionData = [],
     id = 0,
     ws;
 
-// node js global vars to interact with electron display js
-global.canReceive = false;
-global.save = false;
+ipcMain.on('ip_address', (event, data) => {
 
-// main function loop
-const main = () => {
-
-  // tries connecting to server
-  if (global.ip != null) {
-    try {
-      ws = new WebSocket('ws://' + global.ip);
-    } catch (e) {
-      cError("Could not connect to server");
-      global.ip = null;
-    }
-
-  // on receiving message from server
-  ws.on('message', function incoming(data, flags) {
+  try {
+    data = data.substring(1,data.length-1);
+    ws = new WebSocket('ws://' + data);
+    // on receiving message from server
+    ws.on('message', function incoming(data, flags) {
       if(global.canReceive) {
         sessionData.push(id.toString() + ":" + data); // if cole adds id then remove this
         id++;
+        mainWindow.webContents.send('robot-data', data);
         cAlert("Received " + sizeOf(data));
         ws.send("ACK " + sizeOf(data));
       }
     });
+    console.log("connected to " + data);
+
+  } catch (e) {
+    cError("Could not connect to " + data);
   }
 
-  if(global.save) {
-    if(sessionData != null) {
-      dataDump(sessionData);
-      sessionData = [];
-      id = 0;
-      global.canReceive = false;
-      global.save = false;
-      global.ip = null;
-    } else {
-      // tell electron you're saving an empty json idiot
-    }
+});
+
+ipcMain.on('save', (event, data) => {
+
+  if(sessionData != null) {
+    dataDump(sessionData);
+    sessionData = [];
+    id = 0;
+  } else {
+    console.log("Idiot you're saving an empty array");
   }
 
-}
-
-// update every 100 ms
-const update = setInterval(main,100);
+});
 
 /* saves json titled with current date */
 const dataDump = (jsonData) => {
@@ -124,13 +115,11 @@ const cError = (data) => {
 }
 
 /* ELECTRON STUFF */
-
-const app = electron.app,  // Module to control application life.
-BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 var mainWindow = null;
 
 // called when electron is done initializing
 app.on('ready', function() {
+
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({width, height, fullscreenable: true, title: "CardinalDash", frame: false});
   mainWindow.loadURL('file://' + __dirname + '/db/index.html');
@@ -138,11 +127,12 @@ app.on('ready', function() {
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
+
 });
 
 // osx on quit
 app.on('window-all-closed', function() {
-    if (process.platform != 'darwin') {
-        app.quit();
-    }
+  if (process.platform != 'darwin') {
+      app.quit();
+  }
 });
