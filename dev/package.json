@@ -1,0 +1,15 @@
+{
+  "name": "dev-server",
+  "version": "1.0.0",
+  "description": "to test websocket connections",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brandon L",
+  "license": "ISC",
+  "dependencies": {
+    "ip": "^1.1.4",
+    "ws": "^2.0.0"
+  }
+}
