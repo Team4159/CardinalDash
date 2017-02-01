@@ -23,7 +23,8 @@ ipcMain.on('ip-address', (event, ip) => {
   ws.on('message', (newData, flags) => {
     if(canReceive) {
       sessionData.push(newData);
-      cInfo('Received ' + sizeOf(newData));
+      mainWindow.webContents.send('robot-data', newData);
+      cInfo('Rec ' + sizeOf(newData) + ' bytes');
     }
   });
 
@@ -33,7 +34,7 @@ ipcMain.on('ip-address', (event, ip) => {
 
   /* If robot server closes, save and reset */
   ws.on('close', () => {
-    dataDump(sessionData);
+    if(sessionData.length > 0) dataDump(sessionData);
     sessionData = [];
     canReceive = false;
   });
@@ -46,7 +47,7 @@ ipcMain.on('canReceive', (event, bleh) => {
 });
 
 ipcMain.on('save', (event, meh) => {
-  dataDump(sessionData);
+  if(sessionData.length > 0) dataDump(sessionData);
   sessionData = [];
   canReceive = false;
 });
@@ -82,6 +83,7 @@ const cAlert = (data) => {
   console.log("[ALERT] " + data);
 }
 const cError = (data) => {
+  mainWindow.webContents.send('error', data);
   console.log("[ERROR] " + data);
 }
 
@@ -114,24 +116,14 @@ function sizeOf(object) {
   var bytes = 0;
   while ( stack.length ) {
     var value = stack.pop();
-
     if ( typeof value === 'boolean' ) {
       bytes += 4;
-    }
-    else if ( typeof value === 'string' ) {
+    } else if ( typeof value === 'string' ) {
       bytes += value.length * 2;
-    }
-    else if ( typeof value === 'number' ) {
+    } else if ( typeof value === 'number' ) {
       bytes += 8;
-    }
-    else if
-    (
-      typeof value === 'object'
-      && objectList.indexOf( value ) === -1
-    )
-    {
+    } else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
       objectList.push( value );
-
       for( var i in value ) {
         stack.push( value[ i ] );
       }
