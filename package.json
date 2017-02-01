@@ -1,0 +1,26 @@
+{
+  "name": "cardinaldash",
+  "version": "1.0.0",
+  "description": "a helpful alternative to frc smartdashboard",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team4159/cardinaldash.git"
+  },
+  "author": "Brandon L",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team4159/cardinaldash/issues"
+  },
+  "homepage": "https://github.com/Team4159/cardinaldash#readme",
+  "dependencies": {
+    "electron": "^1.4.15",
+    "fs": "0.0.1-security",
+    "jquery": "^3.1.1",
+    "plotly.js": "^1.22.0",
+    "ws": "^2.0.0"
+  }
+}
