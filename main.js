@@ -9,7 +9,8 @@ var {app, BrowserWindow, ipcMain} = electron;
 var mainWindow = null;
 var sessionData = [],
     canReceive = false,
-    isListening = false;
+    isListening = false,
+    id = 0;
 
 /* On receiving a new ip address, connect to it */
 ipcMain.on('ip-address', (event, ip) => {
@@ -22,9 +23,16 @@ ipcMain.on('ip-address', (event, ip) => {
 
   ws.on('message', (newData, flags) => {
     if(canReceive) {
-      sessionData.push(newData);
+
+      /* Log and ack it */
       mainWindow.webContents.send('robot-data', newData);
       cInfo('Rec ' + sizeOf(newData) + ' bytes');
+      ws.send('ACK ' + sizeOf(newData));
+
+      /* Add id in front of each data packet */
+      newData = id + ":" + newData;
+      sessionData.push(json.parse(newData));
+      id++
     }
   });
 

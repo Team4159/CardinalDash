@@ -14,7 +14,7 @@ const update = setInterval( () => {
   }
   console.log(tick);
   tick++;
-}, 500);
+}, 250);
 
 wss.on('connection', function(ws) {
   uhh = ws;

@@ -22,10 +22,26 @@ $('#sav-btn').click(()=> {
   e.send('save', null);
 });
 
+var everything, pdpVoltage;
+
 e.on('robot-data', (event, data) => {
+
   $('#log-content').append(data + '<br/>');
+  $("#log-content").scrollTop($("#log-content")[0].scrollHeight);
+
+  everything = JSON.parse(data);
+  pdpVoltage = everything.PDP.Voltage; // Hope this works. If 'undefined', we need to change data structure
+  console.log(pdpVoltage);
+
+  updateData();
+
 });
 
 e.on('error', (event, data) => {
   $('#log-content').append(data + '<br/>');
+  $("#log-content").scrollTop($("#log-content")[0].scrollHeight);
 });
+
+const updateData = () => {
+  $('#pdpVoltage').html('PDP Voltage: ' + pdpVoltage);
+}
