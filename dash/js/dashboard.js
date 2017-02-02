@@ -23,9 +23,9 @@ $('#sav-btn').click(()=> {
 });
 
 e.on('robot-data', (event, data) => {
-  $('#log-content').append(data);
+  $('#log-content').append(data + '<br/>');
 });
 
 e.on('error', (event, data) => {
-  $('#log-content').append(data);
+  $('#log-content').append(data + '<br/>');
 });
