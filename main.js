@@ -114,7 +114,7 @@ function getDate() {
       y = d.getFullYear(),
       h = d.getHours(),
       t = d.getMinutes();
-  return m + "-" + day + "-" + y + "-" + h + ":" + t;
+  return m + "-" + day + "-" + y + "-" + h + "-" + t;
 }
 
 /* Credits to http://stackoverflow.com/questions/1248302/javascript-object-size */
