@@ -30,9 +30,8 @@ e.on('robot-data', (event, data) => {
   $("#log-content").scrollTop($("#log-content")[0].scrollHeight);
 
   everything = JSON.parse(data);
-  console.log(everything);
+
   pdpVoltage = everything.values.PDP.Voltage; // Hope this works. If 'undefined', we need to change data structure
-  console.log(pdpVoltage);
 
   updateData();
 
