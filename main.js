@@ -30,8 +30,8 @@ ipcMain.on('ip-address', (event, ip) => {
       ws.send('ACK ' + sizeOf(newData));
 
       /* Add id in front of each data packet */
-      newData = id + ":" + newData;
-      sessionData.push(json.parse(newData));
+      newData = "{\"" + id + "\":" + newData + "}";
+      sessionData.push(JSON.parse(newData));
       id++
     }
   });
