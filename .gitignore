@@ -2,5 +2,5 @@ node_modules
 npm-debug.log
 dev/node_modules
 dev/npm-debug.log
-data
+data/*
 !data/placeholder.json

@@ -19,6 +19,8 @@
   "dependencies": {
     "electron": "^1.4.15",
     "fs": "0.0.1-security",
+    "gl": "^4.0.3",
+    "interact.js": "^1.2.8",
     "jquery": "^3.1.1",
     "plotly.js": "^1.22.0",
     "ws": "^2.0.0"

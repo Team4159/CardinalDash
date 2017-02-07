@@ -5,8 +5,6 @@ var Plotly = require('plotly.js'),
       dialog = app.dialog,
       fs = require('fs');
 
-/* load templates */
-
 $('#load-btn').click(function() {
   dialog.showOpenDialog(function (fileNames) {
     // fileNames is an array that contains all the selected

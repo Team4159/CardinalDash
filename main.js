@@ -97,6 +97,7 @@ const cError = (data) => {
 
 /* Saves json titled with current date */
 function dataDump(jsonData) {
+  id = 0;
   var fileName = "data/" + getDate() + ".json";
   fs.writeFile(fileName, jsonData, function(err) {
     if(err) {
@@ -106,7 +107,7 @@ function dataDump(jsonData) {
   });
 }
 
-/* Returns string in m-d-yr-h:min format */
+/* Returns string in m-d-yr-h-min format */
 function getDate() {
   var d = new Date();
   var m = d.getMonth()+1,
