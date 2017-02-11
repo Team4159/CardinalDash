@@ -9,7 +9,8 @@ var {app, BrowserWindow, ipcMain} = electron;
 var mainWindow = null;
 var sessionData = [],
     canReceive = false,
-    isListening = false;
+    isListening = false,
+    id = 0;
 
 /* On receiving a new ip address, connect to it */
 ipcMain.on('ip-address', (event, ip) => {
@@ -22,8 +23,16 @@ ipcMain.on('ip-address', (event, ip) => {
 
   ws.on('message', (newData, flags) => {
     if(canReceive) {
-      sessionData.push(newData);
-      cInfo('Received ' + sizeOf(newData));
+
+      /* Log and ack it */
+      mainWindow.webContents.send('robot-data', newData);
+      cInfo('Rec ' + sizeOf(newData) + ' bytes');
+      ws.send('ACK ' + sizeOf(newData));
+
+      /* Add id in front of each data packet */
+      newData = "{\"" + id + "\":" + newData + "}";
+      sessionData.push(JSON.parse(newData));
+      id++
     }
   });
 
@@ -33,7 +42,7 @@ ipcMain.on('ip-address', (event, ip) => {
 
   /* If robot server closes, save and reset */
   ws.on('close', () => {
-    dataDump(sessionData);
+    if(sessionData.length > 0) dataDump(sessionData);
     sessionData = [];
     canReceive = false;
   });
@@ -46,7 +55,7 @@ ipcMain.on('canReceive', (event, bleh) => {
 });
 
 ipcMain.on('save', (event, meh) => {
-  dataDump(sessionData);
+  if(sessionData.length > 0) dataDump(sessionData);
   sessionData = [];
   canReceive = false;
 });
@@ -82,11 +91,13 @@ const cAlert = (data) => {
   console.log("[ALERT] " + data);
 }
 const cError = (data) => {
+  mainWindow.webContents.send('error', data);
   console.log("[ERROR] " + data);
 }
 
 /* Saves json titled with current date */
 function dataDump(jsonData) {
+  id = 0;
   var fileName = "data/" + getDate() + ".json";
   fs.writeFile(fileName, jsonData, function(err) {
     if(err) {
@@ -96,7 +107,7 @@ function dataDump(jsonData) {
   });
 }
 
-/* Returns string in m-d-yr-h:min format */
+/* Returns string in m-d-yr-h-min format */
 function getDate() {
   var d = new Date();
   var m = d.getMonth()+1,
@@ -104,7 +115,7 @@ function getDate() {
       y = d.getFullYear(),
       h = d.getHours(),
       t = d.getMinutes();
-  return m + "-" + day + "-" + y + "-" + h + ":" + t;
+  return m + "-" + day + "-" + y + "-" + h + "-" + t;
 }
 
 /* Credits to http://stackoverflow.com/questions/1248302/javascript-object-size */
@@ -114,24 +125,14 @@ function sizeOf(object) {
   var bytes = 0;
   while ( stack.length ) {
     var value = stack.pop();
-
     if ( typeof value === 'boolean' ) {
       bytes += 4;
-    }
-    else if ( typeof value === 'string' ) {
+    } else if ( typeof value === 'string' ) {
       bytes += value.length * 2;
-    }
-    else if ( typeof value === 'number' ) {
+    } else if ( typeof value === 'number' ) {
       bytes += 8;
-    }
-    else if
-    (
-      typeof value === 'object'
-      && objectList.indexOf( value ) === -1
-    )
-    {
+    } else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
       objectList.push( value );
-
       for( var i in value ) {
         stack.push( value[ i ] );
       }
