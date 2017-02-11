@@ -3,6 +3,8 @@ var el = require('electron').ipcRenderer,
     $ = require('jquery'),
     interact = require('interact.js');
 
+$('#ip-textbox').val("ROBORIO-4159-FRC.local:5800");
+
 $('#connect-btn').click(()=> {
 
   var ip = $('#ip-textbox').val();
@@ -23,16 +25,20 @@ $('#sav-btn').click(()=> {
   el.send('save', null);
 });
 
-var everything, pdpVoltage;
+var everything, pdpVoltage, pdp0, pdp1, pdp2;
 
 el.on('robot-data', (event, data) => {
 
-  $('#log-content').append(data + '<br/>');
+  /* Keep match logs scrolled down */
   $("#log-content").scrollTop($("#log-content")[0].scrollHeight);
 
   everything = JSON.parse(data);
+  console.log(everything);
 
   pdpVoltage = everything.data.PDP.Voltage;
+  pdp0 = everything.data.PDP.Current[0];
+  pdp1 = everything.data.PDP.Current[1];
+  pdp2 = everything.data.PDP.Current[2];
 
   updateData();
 
@@ -40,13 +46,19 @@ el.on('robot-data', (event, data) => {
 
 el.on('error', (event, data) => {
   $('#log-content').append(data + '<br/>');
-  /* Keep match logs scrolled down */
   $("#log-content").scrollTop($("#log-content")[0].scrollHeight);
 });
 
 var updateData = () => {
-  $('#pdpVoltage').html('PDP Voltage'<br>pdpVoltage);
+  
+  $('#pdpVoltage').html('PDP Voltage<br>' + pdpVoltage);
+  $('#pdp0').html('PDP 0 Current<br>' + pdp0);
+  $('#pdp1').html('PDP 1 Current<br>' + pdp1);
+  $('#pdp2').html('PDP 2 Current<br>' + pdp2);
+
 }
+
+/* ignore interact.js stuff below */
 
 interact('.resize-drag')
   .draggable({
@@ -78,34 +90,6 @@ interact('.resize-drag')
     //target.textContent = Math.round(event.rect.width) + '×' + Math.round(event.rect.height);
   });
 
-  // target elements with the "draggable" class
-  interact('.draggable')
-    .draggable({
-      // enable inertial throwing
-      inertia: true,
-      // keep the element within the area of it's parent
-      restrict: {
-        restriction: "parent",
-        endOnly: true,
-        elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-      },
-      // enable autoScroll
-      autoScroll: true,
-
-      // call this function on every dragmove event
-      onmove: dragMoveListener,
-      // call this function on every dragend event
-      onend: function (event) {
-        // uncomment if you want to display pixels moved
-        // var textEl = event.target.querySelector('p');
-        //
-        // textEl && (textEl.textContent =
-        //   'moved a distance of '
-        //   + (Math.sqrt(event.dx * event.dx +
-        //                event.dy * event.dy)|0) + 'px');
-      }
-    });
-
 function dragMoveListener (event) {
   var target = event.target,
       // keep the dragged position in the data-x/data-y attributes
@@ -122,5 +106,5 @@ function dragMoveListener (event) {
   target.setAttribute('data-y', y);
 }
 
-// this is used later in the resizing and gesture demos
+//this is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;

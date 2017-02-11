@@ -68,10 +68,12 @@ body {
   font-size: 20px;
   font-family: sans-serif;
   border-radius: 8px;
+  border-style: solid;
+  border-color: #ffffff;
   padding: 20px;
   margin: 30px 20px;
-
   width: 120px;
+  text-align:center;
 
   /* This makes things *much* easier */
   box-sizing: border-box;
