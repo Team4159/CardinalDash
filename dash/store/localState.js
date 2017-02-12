@@ -1,7 +1,9 @@
 export const saveState = (state) => {
     try {
+        const stateCopy = {...state};
+        delete stateCopy.routing;
         const stringifiedState = JSON.stringify({
-            ...state
+            ...stateCopy
         });
         localStorage.setItem("state", stringifiedState);
     } catch (e) {
