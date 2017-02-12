@@ -12,11 +12,21 @@ body {
 #content-wrapper {
   margin-top:-21px;
 }
+#title-bar .container {
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
+    margin-bottom:0px;
+}
 #title-bar {
   -webkit-app-region: drag;
   height: 40px;
   padding: 0px;
   margin-top:-40px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom:0px;
+  width: 100%;
 }
 #title-bar a {
   -webkit-app-region: no-drag;
@@ -24,9 +34,8 @@ body {
 #title-bar-btns {
   -webkit-app-region: no-drag;
   position: relative;
-  right: -15px;
 }
-#dev-btn span {
+#dev-btn {
   font-size: 10px;
 }
 #title-bar-btns button {
@@ -55,11 +64,6 @@ body {
   min-height: 100%;
   height: 100%;
   max-height: 100%;
-}
-#loading-icon {
-  width:100%;
-  height:100%;
-  background:url(../img/gears.gif) center center no-repeat;
 }
 
 .resize-drag {

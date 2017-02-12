@@ -68,7 +68,7 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width, height, fullscreenable: true, title: "CardinalDash", frame: false});
 
   /* Load initial page */
-  mainWindow.loadURL('file://' + __dirname + '/dash/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/dash/static/index.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;

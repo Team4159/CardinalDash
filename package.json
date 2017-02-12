@@ -4,25 +4,115 @@
   "description": "a helpful alternative to frc smartdashboard",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "better-npm-run start:prod",
+    "start:dev": "better-npm-run start:dev",
+    "build:dev": "better-npm-run build:dev",
+    "build:prod": "better-npm-run build:prod",
+    "build:watch": "better-npm-run build:watch",
+    "test": "better-npm-run test",
+    "postinstall": "npm run build:prod",
+    "lint": "better-npm-run lint",
+    "lint:fix": "better-npm-run lint --fix"
+  },
+  "betterScripts": {
+    "start:prod": {
+      "command": "electron .",
+      "env": {
+        "NODE_ENV": "PROD"
+      }
+    },
+    "start:dev": {
+      "command": "electron ."
+    },
+    "build:watch": {
+      "command": "webpack --watch --progress --config dash/webpack-dev.config.js"
+    },
+    "build:dev": {
+      "command": "webpack --progress --config dash/webpack-dev.config.js"
+    },
+    "build:prod": {
+      "command": "webpack --progress --config dash/webpack-prod.config.js"
+    },
+    "lint": {
+      "command": "find ./birds -name '*.js' -not -path '*/static/*' -not -path '*/public/*' | xargs eslint"
+    },
+    "docs": {
+      "command": "apidoc -i birds/api -o docs"
+    }
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Team4159/cardinaldash.git"
   },
-  "author": "Brandon L",
+  "author": "Brandon Lou, Cole Scott",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Team4159/cardinaldash/issues"
   },
   "homepage": "https://github.com/Team4159/cardinaldash#readme",
   "dependencies": {
-    "electron": "^1.4.15",
+    "babel-core": "6.18.2",
+    "babel-eslint": "7.1.0",
+    "babel-loader": "6.2.7",
+    "babel-plugin-transform-runtime": "6.15.0",
+    "babel-polyfill": "6.16.0",
+    "babel-preset-es2015": "6.18.0",
+    "babel-preset-es2015-native-modules": "6.9.4",
+    "babel-preset-react": "6.16.0",
+    "babel-preset-stage-0": "6.16.0",
+    "babel-preset-stage-2": "6.18.0",
+    "better-npm-run": "0.0.14",
+    "bootstrap-sass": "3.3.7",
+    "copy-webpack-plugin": "4.0.1",
+    "css-loader": "0.26.1",
+    "electron": "1.6.0",
+    "extract-text-webpack-plugin": "1.0.1",
+    "file-loader": "0.10.0",
     "fs": "0.0.1-security",
     "gl": "^4.0.3",
+    "html-webpack-plugin": "2.28.0",
     "interact.js": "^1.2.8",
-    "jquery": "^3.1.1",
-    "plotly.js": "^1.22.0",
-    "ws": "^2.0.0"
+    "node-notifier": "5.0.2",
+    "node-sass": "4.5.0",
+    "on-build-webpack": "0.1.0",
+    "plotly.js": "1.23.0",
+    "react": "^15.4.2",
+    "react-bootstrap": "0.30.7",
+    "react-bootstrap-theme-switcher": "1.0.6",
+    "react-dom": "15.4.2",
+    "react-hot-loader": "1.3.1",
+    "react-markdown": "2.4.2",
+    "react-omniform": "0.8.0",
+    "react-redux": "4.4.5",
+    "react-router": "3.0.0",
+    "react-router-bootstrap": "0.23.1",
+    "react-router-redux": "4.0.6",
+    "redux": "3.6.0",
+    "redux-actions": "0.13.0",
+    "redux-devtools-extension": "2.13.0",
+    "redux-logger": "2.7.4",
+    "redux-saga": "0.12.1",
+    "reselect": "2.5.4",
+    "sass-loader": "4.0.2",
+    "style-loader": "0.13.1",
+    "trim": "0.0.1",
+    "url-loader": "0.5.7",
+    "webpack": "2.2.1",
+    "webpack-dev-middleware": "1.8.4",
+    "webpack-dev-server": "2.1.0-beta.9",
+    "webpack-hot-middleware": "2.13.1",
+    "webpack-md5-hash": "0.0.5",
+    "webpack-merge": "0.15.0",
+    "webpack-uglify-js-plugin": "1.1.9",
+    "webpack-validator": "2.2.9",
+    "webpack-visualizer-plugin": "0.1.5",
+    "ws": "2.0.3",
+    "xr": "0.2.0"
+  },
+  "devDependencies": {
+    "electron-devtools-installer": "2.1.0",
+    "electron-react-devtools": "0.4.0",
+    "react-hot-loader": "1.3.1",
+    "remote-redux-devtools": "0.5.7"
   }
 }
