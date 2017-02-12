@@ -1,7 +1,7 @@
 export const saveState = (state) => {
     try {
         const stringifiedState = JSON.stringify({
-            ...state, routing: null
+            ...state
         });
         localStorage.setItem("state", stringifiedState);
     } catch (e) {
