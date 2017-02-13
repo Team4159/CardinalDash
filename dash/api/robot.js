@@ -8,9 +8,16 @@ const robot = {
     connect: (address) => getResponse("connect", "updateState", address),
     disconnect: () => getResponse("disconnect", "updateState"),
     listen: (enabled) => getResponse("listen", "updateState", enabled),
-    registerHandlers: (cb) => {
+    updateStateHandler: (cb) => {
         ipcRenderer.on("updateState", (event, data) => {
+            console.log("updateState", data);
             cb(a.setStatus(data));
+            console.log("updateState_end", data);
+        });
+    },
+    errorHandler: (cb) => {
+        ipcRenderer.on("error", (event, data) => {
+            cb(a.setError(data));
         });
     }
 };

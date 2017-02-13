@@ -20,9 +20,7 @@ function* robot() {
                 case c.ROBOT_CONNECT: {
                     const address = action.payload.address;
 
-                    const status = yield call(api.robot.connect, address);
-
-                    yield put(a.setStatus(status));
+                    yield call(api.robot.connect, address);
                 }
                 default:
                     break;

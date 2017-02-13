@@ -47,7 +47,7 @@ ipcMain.on("connect", (event, ip) => {
 
   ws.on("error", (e) => {
     sendError({
-      errror: e.code
+      error: e.code
     });
   });
 

@@ -10,11 +10,17 @@ import * as a from "../actions.js";
 
 function *watcher() {
     // Notice me senpai
-    const chan = yield call(chanMaker, api.robot.registerHandlers);
+    const chan = yield call(chanMaker, api.robot.updateStateHandler);
+    const san = yield call(chanMaker, api.robot.errorHandler);
 
     while (true) {
-        const data = yield take(chan);
-        yield put(data);
+        const chanData = yield take(chan);
+        console.log(chanData);
+        yield put(chanData);
+
+        const sanData = yield take(san);
+        console.log(sanData);
+        yield put(sanData);
     }
 }
 

@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import { Navbar, Nav, NavItem } from "react-bootstrap"
+import { Button, Navbar, Nav, NavItem, Modal } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
 import { remote } from "electron";
+
+import _ from 'lodash';
 
 import * as a from "../store/actions.js";
 import * as s from "../store/selectors.js";
@@ -13,7 +15,7 @@ const window = remote.getCurrentWindow();
 const Header = (props) => {
     return (
         <div>
-            <Navbar id="title-bar">
+            <Navbar id="title-bar" collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
                         CardinalDash
@@ -31,6 +33,19 @@ const Header = (props) => {
                     <NavItem eventKey={4} id="close-btn" onClick={close}>x</NavItem>
                 </Nav>
             </Navbar>
+            <Modal show={!_.isEmpty(props.error)} onHide={props.resetError}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {
+                        props.error.error
+                    }
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={props.resetError}>Close</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
@@ -67,11 +82,11 @@ const close = () => {
 };
 
 const mapStateToProps = (state) => ({
-
+    error: s.getError(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-
+    resetError: () => dispatch(a.resetError())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -12,3 +12,8 @@ export const getStatus = createSelector(
     (state) => state.status,
     getStore
 );
+
+export const getError = createSelector(
+    (state) => state.error,
+    getStore
+);
