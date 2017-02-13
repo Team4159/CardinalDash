@@ -21,7 +21,8 @@ const config = {
             name: "common",
         }),
         new CopyWebpackPlugin([
-                {context: 'node_modules/react-bootstrap-theme-switcher/themes/', from: '**/*', to: 'themes/'}
+                {context: 'node_modules/react-bootstrap-theme-switcher/themes/js', from: '**/*', to: 'themes/js'},
+                {context: 'node_modules/react-bootstrap-theme-switcher/themes/superhero', from: '**/*', to: 'themes/superhero'}
             ],
             {copyUnmodified: true}
         )
