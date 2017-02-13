@@ -13,15 +13,19 @@ function *watcher() {
     const chan = yield call(chanMaker, api.robot.updateStateHandler);
     const san = yield call(chanMaker, api.robot.errorHandler);
 
-    while (true) {
-        const chanData = yield take(chan);
-        console.log(chanData);
-        yield put(chanData);
+    yield fork(function *chandler() {
+        while (true) {
+            const chanData = yield take(chan);
+            yield put(chanData);
+        }
+    });
 
-        const sanData = yield take(san);
-        console.log(sanData);
-        yield put(sanData);
-    }
+    yield fork(function *sandler() {
+        while (true) {
+            const sanData = yield take(san);
+            yield put(sanData);
+        }
+    });
 }
 
 const chanMaker = (onii) => {
