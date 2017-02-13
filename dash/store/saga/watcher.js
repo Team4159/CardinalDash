@@ -1,4 +1,4 @@
-import { take, call, select, put } from "redux-saga/effects";
+import { take, call, select, put, fork } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
 import { push } from "react-router-redux";
 

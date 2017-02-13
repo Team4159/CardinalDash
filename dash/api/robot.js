@@ -10,9 +10,7 @@ const robot = {
     listen: (enabled) => getResponse("listen", "updateState", enabled),
     updateStateHandler: (cb) => {
         ipcRenderer.on("updateState", (event, data) => {
-            console.log("updateState", data);
             cb(a.setStatus(data));
-            console.log("updateState_end", data);
         });
     },
     errorHandler: (cb) => {
