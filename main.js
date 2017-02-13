@@ -74,7 +74,7 @@ ipcMain.on("listen", (event, enabled) => {
 });
 
 const updateState = () => {
-    mainWindow.webContents.send("updateState", {
+    mainWindow.webContents.send("updateStatus", {
         address: ipAddress,
         connected,
         connecting,

@@ -9,7 +9,7 @@ const robot = {
     disconnect: () => getResponse("disconnect", "updateState"),
     listen: (enabled) => getResponse("listen", "updateState", enabled),
     updateStateHandler: (cb) => {
-        ipcRenderer.on("updateState", (event, data) => {
+        ipcRenderer.on("updateStatus", (event, data) => {
             cb(a.setStatus(data));
         });
     },
