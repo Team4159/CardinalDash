@@ -12,24 +12,26 @@ const window = remote.getCurrentWindow();
 
 const Header = (props) => {
     return (
-        <Navbar id="title-bar">
-            <Navbar.Header>
-                <Navbar.Brand>
-                    CardinalDash
-                </Navbar.Brand>
-            </Navbar.Header>
-            <Nav>
-                <LinkContainer to="/dashboard"><NavItem eventKey={1}>Dashboard</NavItem></LinkContainer>
-                <LinkContainer to="/logs"><NavItem eventKey={2}>Graphs</NavItem></LinkContainer>
-                <LinkContainer to="/settings"><NavItem eventKey={3}>Settings</NavItem></LinkContainer>
-            </Nav>
-            <Nav pullRight id="title-bar-btns">
-                <NavItem eventKey={1} id="dev-btn" onClick={toggleDev}>DEV</NavItem>
-                <NavItem eventKey={2} id="min-btn" onClick={minimize}>-</NavItem>
-                <NavItem eventKey={3} id="max-btn" onClick={maximize}>+</NavItem>
-                <NavItem eventKey={4} id="close-btn" onClick={close}>x</NavItem>
-            </Nav>
-        </Navbar>
+        <div>
+            <Navbar id="title-bar">
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        CardinalDash
+                    </Navbar.Brand>
+                </Navbar.Header>
+                <Nav>
+                    <LinkContainer to="/dashboard"><NavItem eventKey={1}>Dashboard</NavItem></LinkContainer>
+                    <LinkContainer to="/logs"><NavItem eventKey={2}>Graphs</NavItem></LinkContainer>
+                    <LinkContainer to="/settings"><NavItem eventKey={3}>Settings</NavItem></LinkContainer>
+                </Nav>
+                <Nav pullRight id="title-bar-btns">
+                    <NavItem eventKey={1} id="dev-btn" onClick={toggleDev}>DEV</NavItem>
+                    <NavItem eventKey={2} id="min-btn" onClick={minimize}>-</NavItem>
+                    <NavItem eventKey={3} id="max-btn" onClick={maximize}>+</NavItem>
+                    <NavItem eventKey={4} id="close-btn" onClick={close}>x</NavItem>
+                </Nav>
+            </Navbar>
+        </div>
     );
 };
 

@@ -1,25 +1,26 @@
-import xr from "xr";
-import ipcRenderer from "electron";
+const ipcRenderer = require("electron").ipcRenderer;
+
+import { dispatch } from "react-redux";
+
+import * as a from "../store/actions.js";
 
 const robot = {
-    connect: (address) => {
-        const connect = {address};
-        ipcRenderer.send("connect", connect);
-        return apiOn("connect_res");
-    },
-    disconnect: () => {
-        ipcRenderer.send("disconnect");
-        return apiOn("disconnect_ack");
-    },
-    listen: () => {
-        ipcRenderer.send("disconnect");
-        return apiOn("disconnect_ack");
+    connect: (address) => getResponse("connect", "updateState", address),
+    disconnect: () => getResponse("disconnect", "updateState"),
+    listen: (enabled) => getResponse("listen", "updateState", enabled),
+    registerHandlers: (cb) => {
+        ipcRenderer.on("updateState", (event, data) => {
+            cb(a.setStatus(data));
+        });
     }
 };
 
-function * getResponse(event) {
-    ipcRenderer.on(event, (response) => {
-        return(response)
+const getResponse = (send, res, ...data) => {
+    return new Promise(resolve => {
+        ipcRenderer.send(send, ...data);
+        ipcRenderer.once(res, response => {
+            resolve(response)
+        });
     });
 }
 

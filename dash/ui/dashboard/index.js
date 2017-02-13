@@ -8,11 +8,22 @@ import { connect } from "react-redux";
 import * as a from "../../store/actions.js";
 import * as s from "../../store/selectors.js";
 
+const headerMessage = (props) => {
+    if(props.status.connected)
+        return "Connected";
+    if(props.status.connecting)
+        return "Connecting..."
+    return "Not connected."
+}
+
 const Dashboard = (props) => {
+    const connect = () => props.connect(props.form.addressInput);
     return (
         <Container>
             <Col sm={8} id="dashboard-main-content" className="text-left fill">
-                <PageHeader>{props.connection || "Not connected."}<small>{props.connection}</small></PageHeader>
+                <PageHeader>{headerMessage(props)}
+                    <small>{props.status.connected ? props.status.address : ""}</small>
+                </PageHeader>
                 <form>
                     <FormGroup controlId="addressInput">
                         <ControlLabel>Robot address</ControlLabel>
@@ -23,7 +34,7 @@ const Dashboard = (props) => {
                             onChange={props.handleUpdate}
                             />
                     </FormGroup>
-                    <Button onClick={props.connect}>
+                    <Button onClick={connect} disabled={props.status.connecting}>
                         Connect
                     </Button>
                 </form>
@@ -42,11 +53,13 @@ const Dashboard = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    form: s.getDashboardForm(state)
+    form: s.getDashboardForm(state),
+    status: s.getStatus(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    handleUpdate: (e) => dispatch(a.setDashboardForm({ [ e.target.id ]: e.target.value }))
+    handleUpdate: (e) => dispatch(a.setDashboardForm({ [ e.target.id ]: e.target.value })),
+    connect: (ip) => dispatch(a.robotConnect({address: ip}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

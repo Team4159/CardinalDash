@@ -1,4 +1,4 @@
-import { take, call, put, select } from "redux-saga/effects";
+import { take, call, select } from "redux-saga/effects";
 import { push } from "react-router-redux";
 
 import trim from "trim";
@@ -18,23 +18,11 @@ function* robot() {
             ]);
             switch (action.type) {
                 case c.ROBOT_CONNECT: {
-                    // Gather relevent params
-                    const { address } = action.payload;
+                    const address = action.payload.address;
 
-                    // Login
-                    const { user, token } = yield call(authWrapper, login, email, password);
-                    yield put(a.setUser({
-                        token,
-                        ...user
-                    }));
-                    yield put(a.resetLoginForm());
+                    const status = yield call(api.robot.connect, address);
 
-                    // Redirect to the correct page
-                    if (!user.teamnumber)
-                        yield put(push("/selectTeam"));
-                    else
-                        yield put(push("/"));
-                    break;
+                    yield put(a.setStatus(status));
                 }
                 default:
                     break;
@@ -43,19 +31,6 @@ function* robot() {
             // uh oh... this should't happen.
         }
     }
-}
-
-export function* login(email, password) {
-    const res = yield call(api.auth.login, trim(email || ""), password);
-    if (res.error) throw new Error(res.error.message);
-    return res.data;
-}
-
-export function* robotWrapper(func, ...args) {
-    yield put(a.authLoad());
-    const res = yield call(func, ...args);
-    yield put(a.authSuccess());
-    return res;
 }
 
 export default robot;

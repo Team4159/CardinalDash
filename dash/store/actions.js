@@ -8,3 +8,8 @@ export const robotConnect = createAction(c.ROBOT_CONNECT);
 // Form Reducers
 export const setDashboardForm = createAction(c.DASHBOARD_FORM_SET);
 export const resetDashboardForm = createAction(c.DASHBOARD_FORM_RESET);
+
+export const setStatus = createAction(c.STATUS_SET);
+
+export const setError = createAction(c.ERROR_SET);
+export const resetError = createAction(c.ERROR_RESET);
