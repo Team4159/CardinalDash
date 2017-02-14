@@ -12,6 +12,7 @@ function *watcher() {
     // Notice me senpai
     const chan = yield call(chanMaker, api.robot.updateStateHandler);
     const san = yield call(chanMaker, api.robot.errorHandler);
+    const sama = yield call(chanMaker, api.robot.dataHandler);
 
     yield fork(function *chandler() {
         while (true) {
@@ -24,6 +25,13 @@ function *watcher() {
         while (true) {
             const sanData = yield take(san);
             yield put(sanData);
+        }
+    });
+
+    yield fork(function *samadler() {
+        while (true) {
+            const samaData = yield take(sama);
+            yield put(samaData);
         }
     });
 }

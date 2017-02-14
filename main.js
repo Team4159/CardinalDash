@@ -20,21 +20,21 @@ ipcMain.on("connect", (event, ip) => {
 
   ws = new WebSocket("ws://" + ip);
 
-  ipAddress = ip;
-  listening = false;
-  connected = false;
-  connecting = true;
-  updateState();
+  ws.ipAddress = ip;
+  ws.listening = true;
+  ws.connected = false;
+  ws.connecting = true;
+  updateState(ws);
 
   ws.on("open", () => {
-      connected = true;
-      connecting = false;
-      updateState();
+      ws.connected = true;
+      ws.connecting = false;
+      updateState(ws);
   });
 
   ws.on("message", (newData, flags) => {
-    if(listening) {
-      ws.send("ACK " + sizeOf(newData));
+    if(ws.listening) {
+      //ws.send("ACK " + sizeOf(newData));
 
       /* Add id in front of each data packet */
       newData = "{\"" + id + "\":" + newData + "}";
@@ -53,11 +53,10 @@ ipcMain.on("connect", (event, ip) => {
 
   /* If robot server closes, save and reset */
   ws.on("close", () => {
-    ipAddress = null;
-    listening = false;
-    connected = false;
-    connecting = false;
-    updateState();
+    ws.listening = false;
+    ws.connected = false;
+    ws.connecting = false;
+    updateState(ws);
     if(sessionData.length > 0) dataDump(sessionData);
     sessionData = [];
     id = 0;
@@ -69,16 +68,16 @@ ipcMain.on("disconnect", (event) => {
 });
 
 ipcMain.on("listen", (event, enabled) => {
-  listening = enabled;
-  updateState();
+  ws.listening = enabled;
+  updateState(ws);
 });
 
-const updateState = () => {
+const updateState = (ws) => {
     mainWindow.webContents.send("updateStatus", {
-        address: ipAddress,
-        connected,
-        connecting,
-        listening
+        address: ws.ipAddress,
+        connected: ws.connected,
+        connecting: ws.connecting,
+        listening: ws.listening
     });
 };
 

@@ -5,9 +5,9 @@ import { dispatch } from "react-redux";
 import * as a from "../store/actions.js";
 
 const robot = {
-    connect: (address) => getResponse("connect", "updateState", address),
-    disconnect: () => getResponse("disconnect", "updateState"),
-    listen: (enabled) => getResponse("listen", "updateState", enabled),
+    connect: (address) => getResponse("connect", "updateStatus", address),
+    disconnect: () => getResponse("disconnect", "updateStatus"),
+    listen: (enabled) => getResponse("listen", "updateStatus", enabled),
     updateStateHandler: (cb) => {
         ipcRenderer.on("updateStatus", (event, data) => {
             cb(a.setStatus(data));
@@ -16,6 +16,12 @@ const robot = {
     errorHandler: (cb) => {
         ipcRenderer.on("error", (event, data) => {
             cb(a.setError(data));
+        });
+    },
+    dataHandler: (cb) => {
+        ipcRenderer.on("data", (event, data) => {
+            const parsedData = JSON.parse(data);
+            cb(a.setData(parsedData[Object.keys(parsedData)[0]]));
         });
     }
 };

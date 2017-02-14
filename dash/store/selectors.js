@@ -1,7 +1,6 @@
 import { createSelector } from "reselect";
 
 import { getStore } from "./reducers/kvs.js";
-import { getData } from "./reducers/fetch.js";
 
 export const getDashboardForm = createSelector(
   (state) => state.dashboardForm,
@@ -15,5 +14,10 @@ export const getStatus = createSelector(
 
 export const getError = createSelector(
     (state) => state.error,
+    getStore
+);
+
+export const getData = createSelector(
+    (state) => state.data,
     getStore
 );

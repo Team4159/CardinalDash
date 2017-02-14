@@ -18,6 +18,8 @@ const headerMessage = (props) => {
 
 const Dashboard = (props) => {
     const connect = () => props.connect(props.form.addressInput);
+    const currentData = props.data[props.data.length - 1];
+
     return (
         <Container>
             <Col sm={8} id="dashboard-main-content" className="text-left fill">
@@ -29,7 +31,7 @@ const Dashboard = (props) => {
                         <ControlLabel>Robot address</ControlLabel>
                         <FormControl
                             type="text"
-                            defaultValue={props.form.addressInput || "roborio-4159-frc.local:5800"}
+                            defaultValue={props.form.addressInput}
                             placeholder="Enter address"
                             onChange={props.handleUpdate}
                             />
@@ -45,7 +47,9 @@ const Dashboard = (props) => {
                 <ListGroup>
                     <ListGroupItem>Item 1</ListGroupItem>
                     <ListGroupItem>Item 2</ListGroupItem>
-                    <ListGroupItem>...</ListGroupItem>
+                    <ListGroupItem>{
+                        props.data.data.PDP.Voltage
+                    }</ListGroupItem>
                 </ListGroup>
             </Col>
         </Container>
@@ -54,7 +58,8 @@ const Dashboard = (props) => {
 
 const mapStateToProps = (state) => ({
     form: s.getDashboardForm(state),
-    status: s.getStatus(state)
+    status: s.getStatus(state),
+    data: s.getData(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
