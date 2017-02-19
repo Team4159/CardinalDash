@@ -21,10 +21,11 @@ const config = {
             name: "common",
         }),
         new CopyWebpackPlugin([
-                {context: 'node_modules/react-bootstrap-theme-switcher/themes/js', from: '**/*', to: 'themes/js'},
-                {context: 'node_modules/react-bootstrap-theme-switcher/themes/superhero', from: '**/*', to: 'themes/superhero'}
+                { context: "node_modules/react-bootstrap-theme-switcher/themes/js", from: "**/*", to: "themes/js" },
+                { context: "node_modules/react-bootstrap-theme-switcher/themes/superhero", from: "**/*", to: "themes/superhero" },
+                { context: "dash/fonts", from: "**/*", to: "fonts" }
             ],
-            {copyUnmodified: true}
+            { copyUnmodified: true }
         )
     ],
     module: {
@@ -45,10 +46,10 @@ const config = {
                 test: /\.json$/,
                 loader: "json-loader"
             },
-            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader'},
-            {test: /\.(woff|woff2)$/, loader: 'url-loader?prefix=font/&limit=5000'},
-            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/octet-stream'},
-            {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml'}
+            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader" },
+            { test: /\.(woff|woff2)$/, loader: "url-loader?prefix=font/&limit=5000" },
+            { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url-loader?limit=10000&mimetype=application/octet-stream" },
+            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url-loader?limit=10000&mimetype=image/svg+xml" }
         ]
     }
 };

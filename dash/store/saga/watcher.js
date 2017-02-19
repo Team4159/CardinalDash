@@ -1,35 +1,29 @@
-import { take, call, select, put, fork } from "redux-saga/effects";
+import { take, call, put, fork } from "redux-saga/effects";
 import { eventChannel } from "redux-saga";
-import { push } from "react-router-redux";
 
 import api from "../../api";
-
-import * as c from "../constants.js";
-import * as s from "../selectors.js";
-import * as a from "../actions.js";
-
-function *watcher() {
+function* watcher() {
     // Notice me senpai
     const chan = yield call(chanMaker, api.robot.updateStateHandler);
     const san = yield call(chanMaker, api.robot.errorHandler);
     const sama = yield call(chanMaker, api.robot.dataHandler);
 
-    yield fork(function *chandler() {
-        while (true) {
+    yield fork(function* chandler() {
+        for (;;) {
             const chanData = yield take(chan);
             yield put(chanData);
         }
     });
 
-    yield fork(function *sandler() {
-        while (true) {
+    yield fork(function* sandler() {
+        for (;;) {
             const sanData = yield take(san);
             yield put(sanData);
         }
     });
 
-    yield fork(function *samadler() {
-        while (true) {
+    yield fork(function* samadler() {
+        for (;;) {
             const samaData = yield take(sama);
             yield put(samaData);
         }
@@ -43,6 +37,6 @@ const chanMaker = (onii) => {
             // Don't leave me oniichan ʕ༼◕ ౪ ◕✿༽ʔ
         };
     });
-}
+};
 
 export default watcher;

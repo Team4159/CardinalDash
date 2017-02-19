@@ -1,6 +1,6 @@
 export const saveState = (state) => {
     try {
-        const stateCopy = {...state};
+        const stateCopy = { ...state };
         delete stateCopy.routing;
         delete stateCopy.status;
         const stringifiedState = JSON.stringify({

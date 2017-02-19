@@ -1,7 +1,5 @@
 const ipcRenderer = require("electron").ipcRenderer;
 
-import { dispatch } from "react-redux";
-
 import * as a from "../store/actions.js";
 
 const robot = {
@@ -21,7 +19,7 @@ const robot = {
     dataHandler: (cb) => {
         ipcRenderer.on("data", (event, data) => {
             const parsedData = JSON.parse(data);
-            cb(a.setData(parsedData[Object.keys(parsedData)[0]]));
+            cb(a.setData(parsedData[ Object.keys(parsedData)[ 0 ] ].data));
         });
     }
 };
@@ -30,9 +28,9 @@ const getResponse = (send, res, ...data) => {
     return new Promise(resolve => {
         ipcRenderer.send(send, ...data);
         ipcRenderer.once(res, response => {
-            resolve(response)
+            resolve(response);
         });
     });
-}
+};
 
 export default robot;

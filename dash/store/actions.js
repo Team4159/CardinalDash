@@ -4,6 +4,7 @@ import * as c from "./constants.js";
 
 // Saga Controllers
 export const robotConnect = createAction(c.ROBOT_CONNECT);
+export const robotDisconnect = createAction(c.ROBOT_DISCONNECT);
 
 export const setData = createAction(c.DATA_SET);
 export const resetData = createAction(c.DATA_RESET);

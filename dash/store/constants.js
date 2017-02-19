@@ -1,7 +1,7 @@
 
 // Saga Actions
 export const ROBOT_CONNECT = "ROBOT_CONNECT";
-
+export const ROBOT_DISCONNECT = "ROBOT_DISCONNECT";
 
 // Redux Store Actions
 export const DASHBOARD_FORM_SET = "DASHBOARD_FORM_SET";

@@ -16,9 +16,6 @@ module.exports = {
     "plugins": [
         "react"
     ],
-    "globals": {
-        URL_PREFIX: true
-    },
     "extends": "eslint:recommended",
     "rules": {
         "no-console": ["error", { "allow": ["warn", "error"] }],

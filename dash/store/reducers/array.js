@@ -6,7 +6,7 @@ const array = (prefix) => (state = {}, action) => {
         case `${prefix}_ADD`:
             return [
                 ...state,
-                {...action.payload}
+                { ...action.payload }
             ];
         case `${prefix}_RESET`:
             return {};

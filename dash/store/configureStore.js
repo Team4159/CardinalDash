@@ -1,8 +1,8 @@
-import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+import { createStore, applyMiddleware, combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { routerReducer, routerMiddleware } from "react-router-redux";
 
-import { composeWithDevTools } from 'remote-redux-devtools';
+import { composeWithDevTools } from "remote-redux-devtools";
 
 import reducers from "./reducers";
 import rootSaga from "./saga/index.js";
@@ -12,6 +12,7 @@ export const reducer = combineReducers({
     routing: routerReducer
 });
 
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
 
 export default function configureStore(basicHistory, state) {
     const sagaMiddleware = createSagaMiddleware();
@@ -20,23 +21,21 @@ export default function configureStore(basicHistory, state) {
           store = createStore(
             reducer,
             state,
-            composeWithDevTools(
+            composeEnhancers(
               applyMiddleware(...[
                     routerMiddleware(basicHistory),
                     sagaMiddleware,
-              ]),
-              window.devToolsExtension ? window.devToolsExtension() : f => f
+              ])
             )
           );
   } else {
       store = createStore(
         reducer,
-        composeWithDevTools(
+        composeEnhancers(
           applyMiddleware(...[
                 routerMiddleware(basicHistory),
                 sagaMiddleware,
-          ]),
-          window.devToolsExtension ? window.devToolsExtension() : f => f
+          ])
         )
       );
   }

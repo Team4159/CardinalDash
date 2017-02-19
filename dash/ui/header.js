@@ -1,11 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router";
-import { Button, Navbar, Nav, NavItem, Modal } from "react-bootstrap"
-import { LinkContainer } from "react-router-bootstrap"
+import { Button, Navbar, Nav, NavItem, Modal } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { remote } from "electron";
 
-import _ from 'lodash';
+import _ from "lodash";
 
 import * as a from "../store/actions.js";
 import * as s from "../store/selectors.js";
@@ -67,17 +66,17 @@ const maximize = () => {
 };
 
 const close = () => {
-  var dialog = require('electron').remote.dialog;
+  var dialog = require("electron").remote.dialog;
   var choice = dialog.showMessageBox(
   remote.getCurrentWindow(),
   {
-  type: 'question',
-  buttons: ['Yes', 'No'],
-  title: 'Confirm',
-  message: 'Are you sure you want to close?'
+  type: "question",
+  buttons: ["Yes", "No"],
+  title: "Confirm",
+  message: "Are you sure you want to close?"
   });
 
-  if(choice === 0 )
+  if (choice === 0)
     window.close();
 };
 

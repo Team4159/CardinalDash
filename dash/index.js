@@ -5,7 +5,7 @@ import { hashHistory, browserHistory } from "react-router";
 import { syncHistoryWithStore } from "react-router-redux";
 
 // Load jquery
-window.$ = window.jQuery = require('./static/themes/js/jquery.min.js');
+window.$ = window.jQuery = require("./static/themes/js/jquery.min.js");
 
 // Load Styles
 import "./index.scss";
