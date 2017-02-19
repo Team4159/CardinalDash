@@ -14,7 +14,7 @@ export const reducer = combineReducers({
 
 const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
 
-export default function configureStore(basicHistory, state) {
+export default (basicHistory, state) => {
     const sagaMiddleware = createSagaMiddleware();
     var store;
     if (state) {
@@ -41,4 +41,4 @@ export default function configureStore(basicHistory, state) {
   }
   sagaMiddleware.run(rootSaga);
   return store;
-}
+};
