@@ -4,3 +4,4 @@ dev/node_modules
 dev/npm-debug.log
 data/*
 !data/placeholder.json
+dash/static
